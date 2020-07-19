@@ -65,17 +65,15 @@ namespace ProgrammersOfTheCaribbean
             var topClosestIslands = GetThreeClosestIslands(state, islands, myPirates[0]);
 
             int numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
-            AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets); ;
+            AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
             numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
-            AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets); ;
+            AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
             numberOfPirets = (int)Math.Floor(myPirates.Count * 0.6);
-            AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets); ;
-            piratesIndex += numberOfPirets;
-
+            AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets);
         }
 
         private List<Island> GetThreeClosestIslands(IPirateGame state, List<Island> islands, Pirate pirate)
@@ -85,7 +83,7 @@ namespace ProgrammersOfTheCaribbean
         }
 
         /// <summary>
-        /// Allocate pirate to island if his first destinarion has been occupied
+        /// Allocate pirate when his target island has been occupied
         /// </summary>
         /// <param name="state"></param>
         /// <param name="pirate"></param>
