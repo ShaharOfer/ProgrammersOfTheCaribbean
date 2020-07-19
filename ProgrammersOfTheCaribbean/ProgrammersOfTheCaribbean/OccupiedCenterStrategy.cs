@@ -64,15 +64,15 @@ namespace ProgrammersOfTheCaribbean
             int piratesIndex = 0;
             var topClosestIslands = GetThreeClosestIslands(state, islands, myPirates[0]);
 
-            int numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
+            int numberOfPirets = Math.Max(1, (int)Math.Floor(myPirates.Count * 0.2));
             AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
-            numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
+            numberOfPirets = Math.Max(1, (int)Math.Floor(myPirates.Count * 0.2));
             AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
-            numberOfPirets = (int)Math.Floor(myPirates.Count * 0.6);
+            numberOfPirets = Math.Max(1, (int)Math.Floor(myPirates.Count * 0.6));
             AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets);
         }
 
