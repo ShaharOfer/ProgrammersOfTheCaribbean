@@ -19,6 +19,7 @@ namespace ProgrammersOfTheCaribbean
             for (int i = 0; i < myPirates.Count; i++)
             {
                 Island closestIsland = GetClosestIsland(state, myPirates[i], islands);
+                state.Debug($"Pirate: {myPirates[i].Id.ToString()} to island: {closestIsland}");
                 islands.Remove(closestIsland);
                 pirateToIsland.Add(myPirates[i], closestIsland);
             }
