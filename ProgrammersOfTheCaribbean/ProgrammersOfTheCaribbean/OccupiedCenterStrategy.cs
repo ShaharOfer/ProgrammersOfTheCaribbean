@@ -84,6 +84,12 @@ namespace ProgrammersOfTheCaribbean
             return topClosestIslands;
         }
 
+        /// <summary>
+        /// Allocate pirate to island if his first destinarion has been occupied
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="pirate"></param>
+        /// <param name="islands"></param>
         private void AllocatePirateToNewIsland(IPirateGame state, Pirate pirate, List<Island> islands)
         {
             int islandNumber = GetIslandWithOneEnemy(islands, state.EnemyPirates());
