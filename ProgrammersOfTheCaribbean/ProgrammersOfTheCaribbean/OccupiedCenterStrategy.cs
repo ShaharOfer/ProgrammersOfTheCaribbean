@@ -7,8 +7,14 @@ namespace ProgrammersOfTheCaribbean
 {
     public class OccupiedCenterStrategy : IStrategy
     {
-        private Dictionary<Pirate, int> _pirateToIsland = new Dictionary<Pirate, int>();
-        private Dictionary<Pirate, Location> _pirateToLocation = new Dictionary<Pirate, Location>();
+        private Dictionary<Pirate, int> _pirateToIsland;
+        private Dictionary<Pirate, Location> _pirateToLocation;
+
+        public OccupiedCenterStrategy()
+        {
+            _pirateToIsland = new Dictionary<Pirate, int>();
+            _pirateToLocation = new Dictionary<Pirate, Location>();
+        }
 
         public Dictionary<Pirate, Location> DoTurn(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
