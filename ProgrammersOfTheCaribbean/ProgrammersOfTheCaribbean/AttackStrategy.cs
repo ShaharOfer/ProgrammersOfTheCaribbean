@@ -5,17 +5,21 @@ using Pirates;
 
 namespace ProgrammersOfTheCaribbean
 {
-    public class AttackStrategy
+    public class AttackStrategy : IStrategy
     {
-        private OccupiedCenterStrategy occupiedStrategy = new OccupiedCenterStrategy();
+        private IStrategy _occupiedStrategy;
 
-        public Dictionary<Pirate, Location> DoTurn(IPirateGame state)
+        public AttackStrategy(IStrategy occupiedStrategy)
+        {
+            _occupiedStrategy = occupiedStrategy;
+        }
+
+        public Dictionary<Pirate, Location> DoTurn(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
             List<List<Pirate>> enemyGroups = FindEnemyGroups(state);
-            List<Pirate> myPirates = new List<Pirate>(state.MyPirates());
             Dictionary<Pirate, Location> pirateToLocation = Attack(myPirates, enemyGroups);
 
-            pirateToLocation.Concat(occupiedStrategy.DoTurn(state, myPirates, state.Islands()));
+            pirateToLocation.Concat(_occupiedStrategy.DoTurn(state, myPirates, state.Islands()));
             return pirateToLocation;
         }
 
