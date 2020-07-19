@@ -46,6 +46,24 @@ namespace ProgrammersOfTheCaribbean
          
         }
 
+        private void Strategy(IPirateGame state)
+        {
+            if (state.MyIslands().Count < 3)
+            {
+                AllocatePiratesToIslands(state, state.MyPirates(), state.Islands());
+            }
+            else //if (state.MyIslands().Count >= 2 && state.EnemyPirates().Count <= 3 && state.MyPirates().Count >= 4)
+            {
+                KillEnemyPirates(state.MyPirates(), state.EnemyPirates());
+                AllocatePiratesToIslands(state, state.MyPirates(), state.Islands());
+            }
+        }
+
+        private void KillEnemyPirates(List<Pirate> myPirates, List<Pirate> EnemyPirates)
+        {
+
+        }
+
         private bool SameLocation(Location l1, Location l2)
         {
             return l1.Row == l2.Row && l1.Col == l2.Col;

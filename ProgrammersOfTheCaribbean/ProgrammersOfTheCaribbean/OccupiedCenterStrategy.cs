@@ -1,0 +1,7 @@
+﻿namespace ProgrammersOfTheCaribbean
+{
+    class OccupiedCenterStrategy
+    {
+        
+    }
+}
