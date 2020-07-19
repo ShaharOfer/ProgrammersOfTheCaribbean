@@ -16,7 +16,6 @@ namespace ProgrammersOfTheCaribbean
 
             for (int i = 0; i < islands.Count; i++)
             {
-
                 Pirate closestPirate = GetClosestPirate(state, islands[i], myPirates);
 
                 //state.Debug($"closest: {closestPirate.Id.ToString()} to island: {islands[i]}");
@@ -49,8 +48,12 @@ namespace ProgrammersOfTheCaribbean
                 {
                     state.Debug($"Nothing {pirate.Id.ToString()}");
                     Island closestIsland = GetClosestIsland(state, pirate, state.NotMyIslands());
-                    List<Direction> movingDirections = state.GetDirections(pirate, closestIsland);
-                    state.SetSail(pirate, movingDirections[0]);
+                    if (closestIsland != null)
+                    {
+                        List<Direction> movingDirections = state.GetDirections(pirate, closestIsland);
+                        state.SetSail(pirate, movingDirections[0]);
+
+                    }
                 }
 
             });
