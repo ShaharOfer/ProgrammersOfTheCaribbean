@@ -8,21 +8,22 @@ namespace ProgrammersOfTheCaribbean
     public class OccupiedCenterStrategy
     {
         private Dictionary<Pirate, int> _pirateToIsland = new Dictionary<Pirate, int>();
+        private Dictionary<Pirate, Location> _pirateToLocation = new Dictionary<Pirate, Location>();
 
-        public void DoTurn(IPirateGame state, List<Pirate> myPirates)
+        public Dictionary<Pirate, Location> DoTurn(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
             state.Debug("Occupied Center Strategy");
             
             if (_pirateToIsland.Count == 0)
             {
                 // Need to allocate pirates to islands
-                var targetIslands = state.EnemyIslands();
-                targetIslands.AddRange(state.NeutralIslands());
-                AllocatePiratesToIslands(state, myPirates, targetIslands);
+                AllocatePiratesToIslands(state, myPirates, islands);
             }
 
-            // Here the pirates know their target islands
+            //Initializing the dictionary
+            _pirateToLocation = new Dictionary<Pirate, Location>();
 
+            // Here the pirates know their target islands
             myPirates.ForEach(pirate =>
             {
                 if (!pirate.IsLost)
@@ -30,24 +31,34 @@ namespace ProgrammersOfTheCaribbean
                     // state.Debug((_pirateToIsland[pirate].Owner == Consts.ME).ToString());
                     if (state.GetIsland(_pirateToIsland[pirate]).Owner == Consts.ME)
                     {
-                        var enemyIslands = state.EnemyIslands();
-                        enemyIslands.AddRange(state.NeutralIslands());
-                        AllocatePirateToNewIsland(state, pirate, enemyIslands);
+                        AllocatePirateToNewIsland(state, pirate, islands);
                     }
 
-
-                    var directions = state.GetDirections(pirate, state.GetIsland(_pirateToIsland[pirate]));
-                    state.SetSail(pirate, directions[0]);
+                    _pirateToLocation.Add(pirate, state.GetIsland(_pirateToIsland[pirate]).Loc);
                 }
             });
 
+            return _pirateToLocation;
+
         }
 
+        /// <summary>
+        /// Checking if the first location is equal to the second
+        /// </summary>
+        /// <param name="l1"></param>
+        /// <param name="l2"></param>
+        /// <returns></returns>
         private bool SameLocation(Location l1, Location l2)
         {
             return l1.Row == l2.Row && l1.Col == l2.Col;
         }
 
+        /// <summary>
+        /// The main function to allocate the pirates
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="myPirates"></param>
+        /// <param name="islands"></param>
         private void AllocatePiratesToIslands(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
             int piratesIndex = 0;
@@ -100,6 +111,8 @@ namespace ProgrammersOfTheCaribbean
             }
             else
             {
+
+                state.Debug("Found island with 1 enemy");
                 _pirateToIsland[pirate] = islandNumber;
             }
 
@@ -113,6 +126,12 @@ namespace ProgrammersOfTheCaribbean
             }
         }
 
+        /// <summary>
+        /// Find island with 1 enemy
+        /// </summary>
+        /// <param name="islands"></param>
+        /// <param name="enemy"></param>
+        /// <returns></returns>
         private int GetIslandWithOneEnemy(List<Island> islands, List<Pirate> enemy)
         {
             foreach (Island island in islands)
