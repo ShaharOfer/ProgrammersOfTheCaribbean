@@ -9,22 +9,25 @@ namespace ProgrammersOfTheCaribbean
         public void DoTurn(IPirateGame state)
         {
             // Initing stuff
-            List<Island> islands = state.NeutralIslands();
-            islands.AddRange(state.EnemyIslands());
-            List<Pirate> myPirates = state.AllMyPirates();
-            state.Debug($"Number of pirates: {myPirates.Count}");
+            List<Island> islands = state.NotMyIslands();
+            List<Pirate> myPirates = state.MyPirates();
+            List<Pirate> copyPirates = new List<Pirate>(myPirates);
             Dictionary<Pirate, Island> pirateToIsland = new Dictionary<Pirate, Island>();
-            List<Pirate> enemyPirates = state.AllEnemyPirates();
 
-            for (int i = 0; i < myPirates.Count; i++)
+            for (int i = 0; i < islands.Count; i++)
             {
-                Island closestIsland = GetClosestIsland(state, myPirates[i], islands);
-                state.Debug($"Pirate: {myPirates[i].Id.ToString()} to island: {closestIsland}");
-                islands.Remove(closestIsland);
-                pirateToIsland.Add(myPirates[i], closestIsland);
+
+                Pirate closestPirate = GetClosestPirate(state, islands[i], myPirates);
+
+                //state.Debug($"closest: {closestPirate.Id.ToString()} to island: {islands[i]}");
+                if (closestPirate != null)
+                {
+                    myPirates.Remove(closestPirate);
+                    pirateToIsland.Add(closestPirate, islands[i]);
+                }
             }
 
-            myPirates.ForEach(pirate =>
+            copyPirates.ForEach(pirate =>
             {
                 if (pirateToIsland.ContainsKey(pirate) && pirateToIsland[pirate] != null)
                 {
@@ -34,14 +37,20 @@ namespace ProgrammersOfTheCaribbean
 
                     if (movingDirections.Count > 0 && !pirate.IsLost)
                     {
+                        state.Debug($"Pirate: {pirate.Id.ToString()}");
+                        movingDirections.ForEach(direc =>
+                        {
+                            state.Debug($"{direc}");
+                        });
                         state.SetSail(pirate, movingDirections[0]);
                     }
                 }
                 else // Bot that has no island
                 {
-                    state.Debug("Nothing");
-                    state.Debug(pirate.Id.ToString());
-                    state.Debug($"{pirate.Loc.Col}, {pirate.Loc.Row}");
+                    state.Debug($"Nothing {pirate.Id.ToString()}");
+                    Island closestIsland = GetClosestIsland(state, pirate, state.NotMyIslands());
+                    List<Direction> movingDirections = state.GetDirections(pirate, closestIsland);
+                    state.SetSail(pirate, movingDirections[0]);
                 }
 
             });
@@ -64,6 +73,29 @@ namespace ProgrammersOfTheCaribbean
             });
 
             return closestIsland;
+        }
+
+        private Pirate GetClosestPirate(IPirateGame state, Island island, List<Pirate> pirates)
+        {
+            // Move from the island
+            // Move to closest attacked island
+            // 
+            int closetDIstance = int.MaxValue;
+            Pirate closestPirate = null;
+            pirates.ForEach(pirate =>
+            {
+                if (!pirate.IsLost)
+                {
+                    int distnace = state.Distance(pirate, island);
+                    if (distnace < closetDIstance)
+                    {
+                        closestPirate = pirate;
+                        closetDIstance = distnace;
+                    }
+                }
+            });
+
+            return closestPirate;
         }
     }
 }
