@@ -52,7 +52,6 @@ namespace ProgrammersOfTheCaribbean
                     {
                         List<Direction> movingDirections = state.GetDirections(pirate, closestIsland);
                         state.SetSail(pirate, movingDirections[0]);
-
                     }
                 }
 
