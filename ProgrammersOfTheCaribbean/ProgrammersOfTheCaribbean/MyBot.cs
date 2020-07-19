@@ -99,5 +99,26 @@ namespace ProgrammersOfTheCaribbean
 
             return closestPirate;
         }
+
+        private List<List<Pirate>> FindEnemyGroups(IPirateGame state)
+        {
+            List<List<Pirate>> enemyGroups = new List<List<Pirate>>();
+            List<Pirate> enemyPirates = state.EnemyPirates();
+            for(int i=0; i<enemyPirates.Count; i++)
+            {
+                enemyGroups.Add(new List<Pirate>());
+                for (int j=i; j<enemyPirates.Count; j++)
+                {
+                    if (state.Distance(enemyPirates[i], enemyPirates[j]) < 5)
+                    {
+                        enemyGroups[i].Add(enemyPirates[j]);
+                        enemyPirates.Remove(enemyPirates[j]);
+                    }
+                }
+            }
+
+            return enemyGroups;
+        }
+
     }
 }
