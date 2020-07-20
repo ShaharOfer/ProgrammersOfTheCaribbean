@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Pirates;
 
 namespace ProgrammersOfTheCaribbean
@@ -26,13 +28,23 @@ namespace ProgrammersOfTheCaribbean
             foreach(var pair in piratesToLocations)
             {
                 var directions = state.GetDirections(pair.Key, pair.Value);
-                state.SetSail(pair.Key, directions[0]);
+                int col = Math.Abs(pair.Key.Loc.Col - pair.Value.Col);
+                int row = Math.Abs(pair.Key.Loc.Row - pair.Value.Row);
+                if (col > row && directions.Count >= 2)
+                {
+                    state.SetSail(pair.Key, directions[1]);
+                }
+                else
+                {
+                    state.SetSail(pair.Key, directions[0]);
+                }
+                
             }
         }
 
         private Dictionary<Pirate, Location> Strategy(IPirateGame state)
         {
-            if (state.MyIslands().Count < 2 || state.MyPirates().Count >= state.EnemyPirates().Count)
+            if (state.MyIslands().Count < 3)// || state.MyPirates().Count >= state.EnemyPirates().Count)
             {
                 return _occupiedCenterStrategy.DoTurn(state, state.MyPirates(), state.Islands());
             }

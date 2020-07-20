@@ -16,49 +16,62 @@ namespace ProgrammersOfTheCaribbean
         {
             _occupiedStrategy = occupiedStrategy;
             AttackersSize = 2;
+            
         }
 
         public Dictionary<Pirate, Location> DoTurn(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
             state.Debug("Attack");
             List<List<Pirate>> enemyGroups = FindEnemyGroups(state);
-            enemyGroups.ForEach(group =>
-            {
-                state.Debug(group.Count.ToString());
-            });
-            Dictionary<Pirate, Location> pirateToLocation = Attack(myPirates, enemyGroups);
+            Dictionary<Pirate, Location> pirateToLocation = Attack(state, myPirates, enemyGroups);
 
             pirateToLocation.Concat(_occupiedStrategy.DoTurn(state, myPirates, state.Islands()));
             return pirateToLocation;
         }
 
-        private Dictionary<Pirate, Location> Attack(List<Pirate> myPirates, List<List<Pirate>> enemyGroups)
+        private Dictionary<Pirate, Location> Attack(IPirateGame state, List<Pirate> myPirates, List<List<Pirate>> enemyGroups)
         {
             Dictionary<Pirate, Location> pirateToLocation = new Dictionary<Pirate, Location>();
-            Location location = new Location(0, 39);
 
-            if (enemyGroups.Count > 0)
+            if (enemyGroups.Count > 0 && myPirates.Count >= 2)
             {
-                if (enemyGroups[0].Count < 2)
+                Location location = new Location(2, 24);
+
+                foreach (var group in enemyGroups)
                 {
-                    location = new Location(enemyGroups[0][0].Loc);
+                    if (group.Count < 2)
+                    {
+                        if (!isTeam(state, myPirates))
+                        {
+                            int col = Math.Abs((myPirates[0].Loc.Col + myPirates[1].Loc.Col)/2);
+                            int row = Math.Abs((myPirates[0].Loc.Row + myPirates[1].Loc.Row)/2);
+                            location = new Location(col, row);
+                        }
+                        if (state.Distance(myPirates[0].Loc, group[0].Loc) < state.Distance(myPirates[0].Loc, location))
+                        {
+                            location = group[0].Loc;
+                        }
+                    }
                 }
-            }
-            /*else
-            {
-                location = new Location(enemyGroups[0][0].InitialLocation);
-            }*/
 
-            if(myPirates.Count >= 2)
-            {
                 for (int i = 0; i < AttackersSize; i++)
                 {
                     pirateToLocation.Add(myPirates[0], location);
                     myPirates.Remove(myPirates[0]);
                 }
+                /*if (enemyGroups[0].Count < 2)
+                {
+                    state.Debug($"enemy location - {enemyGroups[0][0].Loc}");
+                    location = enemyGroups[0][0].Loc;
+                }*/
             }
 
             return pirateToLocation;
+        }
+
+        private bool isTeam(IPirateGame state, List<Pirate> myPirates)
+        {
+            return (state.Distance(myPirates[0], myPirates[1]) < 3);
         }
 
         private List<List<Pirate>> FindEnemyGroups(IPirateGame state)
