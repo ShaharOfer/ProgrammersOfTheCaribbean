@@ -38,9 +38,12 @@ namespace ProgrammersOfTheCaribbean
                     // state.Debug((_pirateToIsland[pirate].Owner == Consts.ME).ToString());
                     if (state.GetIsland(_pirateToIsland[pirate]).Owner == Consts.ME)
                     {
+                        state.Debug("Allocatin island to pirate: " + pirate.Id.ToString());
                         AllocatePirateToNewIsland(state, pirate, islands);
                     }
 
+
+                    state.Debug($"Pirate {pirate.Id.ToString()} to island { state.GetIsland(_pirateToIsland[pirate]).Id.ToString()} At ({state.GetIsland(_pirateToIsland[pirate]).Loc.Row},{state.GetIsland(_pirateToIsland[pirate]).Loc.Col})");
                     _pirateToLocation.Add(pirate, state.GetIsland(_pirateToIsland[pirate]).Loc);
                 }
             });
