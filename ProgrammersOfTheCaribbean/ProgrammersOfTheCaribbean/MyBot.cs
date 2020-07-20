@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Pirates;
@@ -47,13 +48,14 @@ namespace ProgrammersOfTheCaribbean
 
         private Dictionary<Pirate, Location> Strategy(IPirateGame state)
         {
+            var islandsToAttack = state.NotMyIslands().Where(island => island.TeamCapturing != Consts.ME).ToList();
             if (state.MyIslands().Count < 3)// || state.MyPirates().Count >= state.EnemyPirates().Count)
             {
-                return _occupiedCenterStrategy.DoTurn(state, state.MyPirates(), state.NotMyIslands());
+                return _occupiedCenterStrategy.DoTurn(state, state.MyPirates(), islandsToAttack);
             }
             else //if (state.MyIslands().Count >= 2 && state.EnemyPirates().Count <= 3 && state.MyPirates().Count >= 4)
             {
-                return _attckStrategy.DoTurn(state, state.MyPirates(), state.Islands());
+                return _attckStrategy.DoTurn(state, state.MyPirates(), islandsToAttack);
             }
         }
     }
