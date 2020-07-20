@@ -134,7 +134,7 @@ namespace ProgrammersOfTheCaribbean
         /// <param name="islands"></param>
         private void AllocatePirateToNewIsland(IPirateGame state, Pirate pirate, List<Island> islands)
         {
-            List<Island> islandNumber = GetSafeIslandsToGo(state, islands);
+            List<Island> islandNumber = this.GetThreeClosestIslands(state, islands, pirate.Loc);
             if (islandNumber.Count == 0)
             {
                 bool found = false;
