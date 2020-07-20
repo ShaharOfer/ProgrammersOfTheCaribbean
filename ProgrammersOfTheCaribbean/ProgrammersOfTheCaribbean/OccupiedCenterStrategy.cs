@@ -33,7 +33,7 @@ namespace ProgrammersOfTheCaribbean
             // Here the pirates know their target islands
             myPirates.ForEach(pirate =>
             {
-                if (!pirate.IsLost)
+                if (!pirate.IsLost && _pirateToIsland.ContainsKey(pirate))
                 {
                     // state.Debug((_pirateToIsland[pirate].Owner == Consts.ME).ToString());
                     if (state.GetIsland(_pirateToIsland[pirate]).Owner == Consts.ME)
@@ -71,16 +71,27 @@ namespace ProgrammersOfTheCaribbean
             int piratesIndex = 0;
             var topClosestIslands = GetThreeClosestIslands(state, islands, myPirates[0]);
 
-            int numberOfPirets = Math.Max(1, (int)Math.Floor(myPirates.Count * 0.2));
+            int numberOfPirets = (int)Math.Floor(myPirates.Count * 0.6);
+            state.Debug((piratesIndex + numberOfPirets).ToString());
+            AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets);
+            piratesIndex += numberOfPirets;
+
+
+            numberOfPirets = (int)Math.Floor((myPirates.Count - piratesIndex + 1) * 0.5);
+            state.Debug((piratesIndex + numberOfPirets).ToString());
             AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
-            numberOfPirets = Math.Max(1, (int)Math.Floor(myPirates.Count * 0.2));
+            numberOfPirets = (int)Math.Floor((myPirates.Count - piratesIndex + 1) * 0.5);
+            state.Debug((piratesIndex + numberOfPirets).ToString());
             AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
-            numberOfPirets = Math.Max(1, (int)Math.Floor(myPirates.Count * 0.6));
-            AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets);
+            if (piratesIndex < myPirates.Count)
+            {
+                state.Debug("Pirate with no target");
+                AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, myPirates.Count);
+            }
         }
 
         private List<Island> GetThreeClosestIslands(IPirateGame state, List<Island> islands, Pirate pirate)
