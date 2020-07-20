@@ -43,7 +43,10 @@ namespace ProgrammersOfTheCaribbean
 
                     _pirateToLocation.Add(pirate, state.GetIsland(_pirateToIsland[pirate]).Loc);
                 }
+
+                state.Debug($"{pirate.Id}  {_pirateToIsland[pirate].ToString()}");
             });
+
 
             return _pirateToLocation;
 

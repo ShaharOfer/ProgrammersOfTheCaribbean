@@ -47,13 +47,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttackStrategy.cs" />
+    <Compile Include="IStrategy.cs" />
     <Compile Include="MyBot.cs" />
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
+    <Compile Include="obj\Release\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="OccupiedCenterStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ProgrammersOfTheCaribbean.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="IPirateGame.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
