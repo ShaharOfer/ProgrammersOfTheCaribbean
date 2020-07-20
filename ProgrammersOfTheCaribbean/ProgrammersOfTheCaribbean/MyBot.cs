@@ -49,7 +49,7 @@ namespace ProgrammersOfTheCaribbean
         {
             if (state.MyIslands().Count < 3)// || state.MyPirates().Count >= state.EnemyPirates().Count)
             {
-                return _occupiedCenterStrategy.DoTurn(state, state.MyPirates(), state.Islands());
+                return _occupiedCenterStrategy.DoTurn(state, state.MyPirates(), state.NotMyIslands());
             }
             else //if (state.MyIslands().Count >= 2 && state.EnemyPirates().Count <= 3 && state.MyPirates().Count >= 4)
             {

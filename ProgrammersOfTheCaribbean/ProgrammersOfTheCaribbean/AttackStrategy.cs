@@ -25,7 +25,7 @@ namespace ProgrammersOfTheCaribbean
             List<List<Pirate>> enemyGroups = FindEnemyGroups(state);
             Dictionary<Pirate, Location> pirateToLocation = Attack(state, myPirates, enemyGroups);
 
-            pirateToLocation.Concat(_occupiedStrategy.DoTurn(state, myPirates, state.Islands()));
+            pirateToLocation.Concat(_occupiedStrategy.DoTurn(state, myPirates, state.NotMyIslands()));
             return pirateToLocation;
         }
 

@@ -81,11 +81,11 @@ namespace ProgrammersOfTheCaribbean
             AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
-            numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
+            numberOfPirets = (int)Math.Floor(myPirates.Count * 0.4);
             AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
-            numberOfPirets = (int)Math.Floor(myPirates.Count * 0.6);
+            numberOfPirets = (int)Math.Floor(myPirates.Count * 0.4);
             AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
         }

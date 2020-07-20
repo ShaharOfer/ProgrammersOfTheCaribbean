@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ProgrammersOfTheCaribbean.zip" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IPirateGame.dll" />
