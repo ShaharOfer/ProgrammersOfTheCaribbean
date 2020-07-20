@@ -28,6 +28,8 @@ namespace ProgrammersOfTheCaribbean
             foreach(var pair in piratesToLocations)
             {
                 var directions = state.GetDirections(pair.Key, pair.Value);
+                state.SetSail(pair.Key, directions[0]);
+                /*
                 int col = Math.Abs(pair.Key.Loc.Col - pair.Value.Col);
                 int row = Math.Abs(pair.Key.Loc.Row - pair.Value.Row);
                 if (col > row && directions.Count >= 2)
@@ -38,6 +40,7 @@ namespace ProgrammersOfTheCaribbean
                 {
                     state.SetSail(pair.Key, directions[0]);
                 }
+                */
                 
             }
         }
