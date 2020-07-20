@@ -35,18 +35,14 @@ namespace ProgrammersOfTheCaribbean
 
             if (enemyGroups.Count > 0 && myPirates.Count >= 2)
             {
-                Location location = new Location(2, 24);
+                int col = Math.Abs((myPirates[0].Loc.Col + myPirates[1].Loc.Col) / 2);
+                int row = Math.Abs((myPirates[0].Loc.Row + myPirates[1].Loc.Row) / 2);
+                Location location = new Location(col, row);
 
                 foreach (var group in enemyGroups)
                 {
                     if (group.Count < 2)
                     {
-                        if (!isTeam(state, myPirates))
-                        {
-                            int col = Math.Abs((myPirates[0].Loc.Col + myPirates[1].Loc.Col)/2);
-                            int row = Math.Abs((myPirates[0].Loc.Row + myPirates[1].Loc.Row)/2);
-                            location = new Location(col, row);
-                        }
                         if (state.Distance(myPirates[0].Loc, group[0].Loc) < state.Distance(myPirates[0].Loc, location))
                         {
                             location = group[0].Loc;
