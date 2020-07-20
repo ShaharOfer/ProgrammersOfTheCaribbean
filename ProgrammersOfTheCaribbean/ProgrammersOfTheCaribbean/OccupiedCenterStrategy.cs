@@ -21,7 +21,6 @@ namespace ProgrammersOfTheCaribbean
         {
 
             state.Debug("Occupied Center Strategy");
-
             _pirateToLocation = new Dictionary<Pirate, Location>();
 
             if (_pirateToIsland.Count == 0)
@@ -42,12 +41,20 @@ namespace ProgrammersOfTheCaribbean
                         AllocatePirateToNewIsland(state, pirate, islands);
                     }
 
-
+                    
                     state.Debug($"Pirate {pirate.Id.ToString()} to island { state.GetIsland(_pirateToIsland[pirate]).Id.ToString()} At ({state.GetIsland(_pirateToIsland[pirate]).Loc.Row},{state.GetIsland(_pirateToIsland[pirate]).Loc.Col})");
                     _pirateToLocation.Add(pirate, state.GetIsland(_pirateToIsland[pirate]).Loc);
+                   
                 }
 
-                state.Debug($"{pirate.Id}  {_pirateToIsland[pirate].ToString()}");
+                try
+                {
+                    state.Debug($"{pirate.Id}  {_pirateToIsland[pirate].ToString()}");
+                }
+                catch(Exception e)
+                {
+                    state.Debug(e.ToString());
+                }
             });
 
 
@@ -94,8 +101,29 @@ namespace ProgrammersOfTheCaribbean
 
         private List<Island> GetThreeClosestIslands(IPirateGame state, List<Island> islands, Location startLocation)
         {
+            //var leastEnemiesIslands = GetSafeIslandsToGo(state, islands);
             var topClosestIslands = islands.OrderBy(island => state.Distance(startLocation, island.Loc)).Take(3).ToList();
             return topClosestIslands;
+        }
+
+        private List<Island> GetSafeIslandsToGo(IPirateGame state, List<Island> islands)
+        {
+            var leastPirates = islands.Where( island =>
+            {
+                int enemyCounter = 0;
+                state.EnemyPirates().ForEach(enemy =>
+                {
+                    if (state.InRange(enemy, island.Loc))
+                    {
+                        enemyCounter++;
+                    }
+                });
+
+                return enemyCounter < 3 && !_pirateToIsland.ContainsValue(island.Id);
+            }
+            ).ToList();
+
+            return leastPirates;
         }
 
         /// <summary>
@@ -106,8 +134,8 @@ namespace ProgrammersOfTheCaribbean
         /// <param name="islands"></param>
         private void AllocatePirateToNewIsland(IPirateGame state, Pirate pirate, List<Island> islands)
         {
-            int islandNumber = GetIslandWithOneEnemy(islands, state.EnemyPirates());
-            if (islandNumber == -1)
+            List<Island> islandNumber = GetSafeIslandsToGo(state, islands);
+            if (islandNumber.Count == 0)
             {
                 bool found = false;
                 for (int i = 0; i < islands.Count; i++)
@@ -126,14 +154,14 @@ namespace ProgrammersOfTheCaribbean
 
                 if (!found)
                 {
+                    state.Debug($"Pirate: {pirate.Id.ToString()} is going to default island 3");
                     _pirateToIsland[pirate] = 2; // Default island
                 }
             }
             else
             {
-
-                state.Debug("Found island with 1 enemy");
-                _pirateToIsland[pirate] = islandNumber;
+                state.Debug($"Going to least enemies island");
+                _pirateToIsland[pirate] = islandNumber[0].Id;
             }
 
         }
@@ -156,7 +184,7 @@ namespace ProgrammersOfTheCaribbean
         {
             foreach (Island island in islands)
             {
-                int num = enemy.Where(pirate => SameLocation(pirate.Loc, island.Loc)).ToArray().Length;
+                int num = enemy.OrderBy(pirate => SameLocation(pirate.Loc, island.Loc)).ToArray().Length;
                 if (num == 1)
                 {
                     return island.Id;
