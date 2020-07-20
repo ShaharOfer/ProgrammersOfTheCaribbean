@@ -32,7 +32,7 @@ namespace ProgrammersOfTheCaribbean
 
         private Dictionary<Pirate, Location> Strategy(IPirateGame state)
         {
-            if (state.MyIslands().Count < 3)
+            if (state.MyIslands().Count < 2 || state.MyPirates().Count >= state.EnemyPirates().Count)
             {
                 return _occupiedCenterStrategy.DoTurn(state, state.MyPirates(), state.Islands());
             }

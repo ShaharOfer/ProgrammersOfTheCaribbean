@@ -20,7 +20,12 @@ namespace ProgrammersOfTheCaribbean
 
         public Dictionary<Pirate, Location> DoTurn(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
+            state.Debug("Attack");
             List<List<Pirate>> enemyGroups = FindEnemyGroups(state);
+            enemyGroups.ForEach(group =>
+            {
+                state.Debug(group.Count.ToString());
+            });
             Dictionary<Pirate, Location> pirateToLocation = Attack(myPirates, enemyGroups);
 
             pirateToLocation.Concat(_occupiedStrategy.DoTurn(state, myPirates, state.Islands()));
@@ -30,20 +35,27 @@ namespace ProgrammersOfTheCaribbean
         private Dictionary<Pirate, Location> Attack(List<Pirate> myPirates, List<List<Pirate>> enemyGroups)
         {
             Dictionary<Pirate, Location> pirateToLocation = new Dictionary<Pirate, Location>();
-            Location location;
-            if (enemyGroups[0].Count < 2)
+            Location location = new Location(0, 39);
+
+            if (enemyGroups.Count > 0)
             {
-                location = new Location(enemyGroups[0][0].Loc);
+                if (enemyGroups[0].Count < 2)
+                {
+                    location = new Location(enemyGroups[0][0].Loc);
+                }
             }
-            else
+            /*else
             {
                 location = new Location(enemyGroups[0][0].InitialLocation);
-            }
+            }*/
 
-            for (int i = 0; i < AttackersSize; i++)
+            if(myPirates.Count >= 2)
             {
-                pirateToLocation.Add(myPirates[i], location);
-                myPirates.Remove(myPirates[i]);
+                for (int i = 0; i < AttackersSize; i++)
+                {
+                    pirateToLocation.Add(myPirates[0], location);
+                    myPirates.Remove(myPirates[0]);
+                }
             }
 
             return pirateToLocation;
@@ -58,7 +70,7 @@ namespace ProgrammersOfTheCaribbean
                 enemyGroups.Add(new List<Pirate>());
                 for (int j = i; j < enemyPirates.Count; j++)
                 {
-                    if (state.Distance(enemyPirates[i], enemyPirates[j]) < 5)
+                    if (state.Distance(enemyPirates[i], enemyPirates[j]) < 3)
                     {
                         enemyGroups[i].Add(enemyPirates[j]);
                         enemyPirates.Remove(enemyPirates[j]);
