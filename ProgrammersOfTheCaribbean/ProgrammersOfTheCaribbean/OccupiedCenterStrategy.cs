@@ -72,24 +72,24 @@ namespace ProgrammersOfTheCaribbean
         private void AllocatePiratesToIslands(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
         {
             int piratesIndex = 0;
-            var topClosestIslands = GetThreeClosestIslands(state, islands, myPirates[0]);
+            var topClosestIslands = GetThreeClosestIslands(state, islands, myPirates[0].InitialLocation);
 
             int numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
-            AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets); ;
+            AllocatePiretsToIsland(topClosestIslands[0], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
             numberOfPirets = (int)Math.Floor(myPirates.Count * 0.2);
-            AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets); ;
+            AllocatePiretsToIsland(topClosestIslands[2], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
 
             numberOfPirets = (int)Math.Floor(myPirates.Count * 0.6);
-            AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets); ;
+            AllocatePiretsToIsland(topClosestIslands[1], myPirates, piratesIndex, piratesIndex + numberOfPirets);
             piratesIndex += numberOfPirets;
         }
 
-        private List<Island> GetThreeClosestIslands(IPirateGame state, List<Island> islands, Pirate pirate)
+        private List<Island> GetThreeClosestIslands(IPirateGame state, List<Island> islands, Location startLocation)
         {
-            var topClosestIslands = islands.OrderBy(island => state.Distance(pirate, island)).Take(3).ToList();
+            var topClosestIslands = islands.OrderBy(island => state.Distance(startLocation, island.Loc)).Take(3).ToList();
             return topClosestIslands;
         }
 
