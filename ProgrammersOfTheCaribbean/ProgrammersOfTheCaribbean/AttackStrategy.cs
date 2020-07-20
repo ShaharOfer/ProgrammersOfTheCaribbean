@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Pirates;
 
 namespace ProgrammersOfTheCaribbean
 {
     public class AttackStrategy : IStrategy
     {
+        public int AttackersSize { get; set; }
+
         private IStrategy _occupiedStrategy;
 
         public AttackStrategy(IStrategy occupiedStrategy)
         {
             _occupiedStrategy = occupiedStrategy;
+            AttackersSize = 2;
         }
 
         public Dictionary<Pirate, Location> DoTurn(IPirateGame state, List<Pirate> myPirates, List<Island> islands)
@@ -36,10 +40,11 @@ namespace ProgrammersOfTheCaribbean
                 location = new Location(enemyGroups[0][0].InitialLocation);
             }
 
-            myPirates.ForEach(pirate =>
+            for (int i = 0; i < AttackersSize; i++)
             {
-                pirateToLocation.Add(pirate, location);
-            });
+                pirateToLocation.Add(myPirates[i], location);
+                myPirates.Remove(myPirates[i]);
+            }
 
             return pirateToLocation;
         }
